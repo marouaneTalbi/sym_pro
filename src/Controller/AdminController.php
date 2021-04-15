@@ -3,15 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Auto;
-use App\Entity\Car;
 use App\Form\AutoType;
 use App\Entity\Categorie;
+use App\Entity\Search;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +43,15 @@ public function add(Request $request){
 
     if($form->isSubmitted() && $form->isValid()){
 
-        $updateCar = $form->getData();
+
+        $file = $form->get('image')->getData();
+        // $updateCar = $form->getData();
+            if($file){
+
+                    $fileName=md5(uniqid()).'.'.$file->guessExtension();;
+                    $file->move($this->getParameter('images_directory'),$fileName);
+            }
+        $car->setImage($fileName);
         $em =  $this->getDoctrine()->getManager();
         $em->persist($car);
         $em->flush();
@@ -63,13 +70,21 @@ return $this->render('admin/add.html.twig',[
 * @Route("/list" ,name="app_list")
 */
 
-public function getAutos(){
+public function getAutos(Request $request){
+    
+    $search = new Search();
+
+    $form = $this->createFormBuilder($search)
+                ->add('mcle', TextType::class,['label'=>'Rechercher','attr'=>['placeholder'=>'Rechercher..']])
+                ->getForm();
+    $form->handleRequest($request);
 
     $repo = $this->getDoctrine()->getRepository(Auto::class);
     $cars = $repo->findAll();
 
     return $this->render("Admin/list.html.twig",[
-        "tabcars" =>$cars
+        "tabcars" =>$cars,
+        "form_search" => $form->createView()
     ]);
 
 }
@@ -85,6 +100,7 @@ public function editAuto(Auto $car,Request $request, EntityManagerInterface $em)
                 ->add('pays')
                 ->add('prix',NumberType::class)
                 ->add('category', EntityType::class,['label' =>'categorie','class'=>Categorie::class,'choice_label'=>'nom'])
+                ->add('image', FileType::class,['label' =>'image','attr' =>['class' =>'form-control']])
                 ->add('description')
                 // ->add('Modifier',SubmitType::class)
                 ->getForm();
@@ -92,7 +108,8 @@ public function editAuto(Auto $car,Request $request, EntityManagerInterface $em)
                 $form->handleRequest($request);
 
                 if($form->isSubmitted() && $form->isValid()){
-
+                    $file = $form->get('image')->getData();
+                
                         $updateCar = $form->getData();
                         // $em =  $this->getDoctrine()->getManager();
                         $em->flush();
