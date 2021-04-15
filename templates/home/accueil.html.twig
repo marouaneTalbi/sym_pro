@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}accueil{% endblock %}
+
+{% block body %}
+<body style="background-color: azure;">
+    
+    <div style="padding:10%">
+        
+        <h1 class="text-center">Accueil</h1>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque aut laboriosam ad, repellendus sapiente, dignissimos doloribus officia suscipit aliquam voluptatibus a quisquam eius labore, laborum unde consequatur tempora maiores dicta.
+    </div>
+    <div class="row">
+    <div class="col-6 offest-3">
+
+{% for car in tabcars %}
+
+<div class="card mb-2" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">ID 00{{car.id}}</h5>
+    <h5 class="card-title">Marque:{{car.marque}}</h5>
+    <h5 class="card-title">Modele :{{car.modele}}</h5>
+    <p class="card-text">PAYS :{{car.pays}}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+
+{% endfor %}
+
+</div>
+</div>
+
+</body>
+
+{% endblock %}

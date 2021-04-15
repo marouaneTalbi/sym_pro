@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LIST{% endblock %}
+
+{% block body %}
+
+<div class="text-end p-2"><a href="{{path('app_add')}}"><button class=" btn btn-warning"><i class="fas fa-plus"></i></a></button></div>
+<table class="table table-striped">
+
+    <thead>
+        <tr >
+            <th>Id</th>
+            <th>categorie</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for cat in tabcat %}
+
+<tr>
+    <td>{{cat.id}}</td>
+    <td>{{cat.nom}}</td>
+    
+ <th><a class="btn btn-warning" href="{{path('app_edit', {id: cat.id}) }}"><i class="fas fa-edit"></i> Edit</a></th>
+        <th><a class="btn btn-danger" onclick="return confirm('Etes vous sur de vouloir suprimer pas')" href="{{path('app_delete', {id: cat.id}) }}"><i class="fas fa-trash"></i> Supprimer</a></th> 
+     </tr>
+     {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

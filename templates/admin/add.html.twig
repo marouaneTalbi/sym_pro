@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Car{% endblock %}
+
+
+
+{% block body %}
+<div class="container bg-light p-5 col-5 mt-5">
+<h2 class="text-center">FORMULAIRE D'AJOUT</h2>
+
+
+{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+
+{{ form_errors(form) }}
+
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.marque,{'attr':{'placeholder':'entrez la Marque'}}) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.modele,{'attr':{'placeholder':'entrez le Modele'}}) }}
+    </div>
+
+</div>
+
+
+{{ form_rest(form) }}
+
+<button type="submit" class="btn btn-success btn-block">Ajout</button>
+{# {{ form_widget(form_car) }} #}
+{{ form_end(form) }}
+</div>
+
+
+{% endblock %}
