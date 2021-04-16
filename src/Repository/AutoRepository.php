@@ -36,7 +36,7 @@ class AutoRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+    
     public function findOneBySomeField($value): ?Auto
     {
         return $this->createQueryBuilder('a')
@@ -46,5 +46,5 @@ class AutoRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+    
 }

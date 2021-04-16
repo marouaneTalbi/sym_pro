@@ -71,23 +71,43 @@ return $this->render('admin/add.html.twig',[
 */
 
 public function getAutos(Request $request){
-    
     $search = new Search();
 
     $form = $this->createFormBuilder($search)
                 ->add('mcle', TextType::class,['label'=>'Rechercher','attr'=>['placeholder'=>'Rechercher..']])
                 ->getForm();
     $form->handleRequest($request);
+    
+    
+     if($form->isSubmitted() && $form->isValid()){  
+        
+        // $res = $form->getData();
+        $cars =[];
+        $mcle = $search->getMcle();
+        
+        if($mcle != ""){
+            
+            $cars= $this->getDoctrine()->getRepository(Auto::class)->findBy(
+                [
+                    'modele' => $mcle,
+                    
+                    ]);
+        }else{
 
-    $repo = $this->getDoctrine()->getRepository(Auto::class);
-    $cars = $repo->findAll();
+            $cars= $this->getDoctrine()->getRepository(Auto::class)->findAll();
 
-    return $this->render("Admin/list.html.twig",[
-        "tabcars" =>$cars,
-        "form_search" => $form->createView()
-    ]);
+        }
+}
+        
+        return $this->render("Admin/list.html.twig",[
+            "tabcars" =>$cars,
+            "form_search" => $form->createView()
+        ]);
+      
+  
 
 }
+   
 
 /**
  * @Route("/edit/{id}", name="app_edit")
