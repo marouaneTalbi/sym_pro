@@ -80,30 +80,28 @@ public function getAutos(Request $request){
     
     
      if($form->isSubmitted() && $form->isValid()){  
-        
-        // $res = $form->getData();
-        $cars =[];
-        $mcle = $search->getMcle();
-        
-        if($mcle != ""){
+            $cars =[];
+            $mcle = $search->getMcle();
+                $cars= $this->getDoctrine()->getRepository(Auto::class)->findBy(
+                    [
+                        'modele' => $mcle,
+                        
+                        ]);
+            return $this->render("Admin/list.html.twig",[
+                "tabcars" =>$cars,
+                "form_search" => $form->createView()
+            ]);
             
-            $cars= $this->getDoctrine()->getRepository(Auto::class)->findBy(
-                [
-                    'modele' => $mcle,
-                    
-                    ]);
-        }else{
+        }else if(!$form->isEmpty()){
 
             $cars= $this->getDoctrine()->getRepository(Auto::class)->findAll();
-
+            return $this->render("Admin/list.html.twig",[
+                        "tabcars" =>$cars,
+                        "form_search" => $form->createView()
+                    ]);
         }
-}
         
-        return $this->render("Admin/list.html.twig",[
-            "tabcars" =>$cars,
-            "form_search" => $form->createView()
-        ]);
-      
+
   
 
 }
